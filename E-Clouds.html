@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Clouds - Dashboard Cuaca</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #f4f7fc;
+      color: #333;
+      display: flex;
+    }
+
+    aside {
+      width: 220px;
+      background: #fff;
+      height: 100vh;
+      padding: 2rem 1rem;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #007BFF;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li {
+      margin: 1rem 0;
+      font-weight: 500;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .search input {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      width: 250px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+
+    .weather-box {
+      background: #d6ecff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .weather-box h1 {
+      font-size: 3rem;
+    }
+
+    .weather-box p {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .details-grid {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .detail-box {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .weekly-forecast {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .day {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .day:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      aside {
+        display: none;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside>
+    <div class="logo">E-Clouds</div>
+    <nav class="sidebar">
+      <ul>
+        <li>Dashboard</li>
+        <li>Map</li>
+        <li>Saved Location</li>
+        <li>Calendar</li>
+        <li>Settings</li>
+        <li>Log Out</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="search">
+        <input type="text" id="cityInput" placeholder="Search city..." />
+      </div>
+      <div class="profile">
+        <img src="https://i.pravatar.cc/40" alt="Profile" style="border-radius: 50%" />
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <div>
+        <div class="weather-box">
+          <h2 id="cityName">Klaten</h2>
+          <h1 id="temp">26°C</h1>
+          <p id="conditionText">Mostly Clear</p>
+
+          <div class="details-grid">
+            <div class="detail-box">
+              <strong>Pressure</strong><br><span id="pressure">720 hPa</span>
+            </div>
+            <div class="detail-box">
+              <strong>Humidity</strong><br><span id="humidity">32%</span>
+            </div>
+            <div class="detail-box">
+              <strong>Wind</strong><br><span id="wind">12 km/h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="details-grid" style="margin-top: 2rem;">
+          <div class="detail-box">
+            <strong>Feels Like</strong><br><span id="feelslike">26°C</span>
+          </div>
+          <div class="detail-box">
+            <strong>UV Index</strong><br><span id="uv">Low</span>
+          </div>
+          <div class="detail-box">
+            <strong>Wind Dir</strong><br><span id="wind_dir">N/A</span>
+          </div>
+          <div class="detail-box">
+            <strong>Last Update</strong><br><span id="last_updated">--</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="weekly-forecast">
+        <h3>This Week</h3>
+        <div class="day"><span>Now</span><span id="nowTemp">--</span></div>
+        <div class="day"><span>Tomorrow</span><span>Coming soon</span></div>
+        <div class="day"><span>Friday</span><span>Coming soon</span></div>
+        <div class="day"><span>Saturday</span><span>Coming soon</span></div>
+        <div class="day"><span>Sunday</span><span>Coming soon</span></div>
+        <div class="day"><span>Monday</span><span>Coming soon</span></div>
+        <div class="day"><span>Tuesday</span><span>Coming soon</span></div>
+        <div class="day"><span>Wednesday</span><span>Coming soon</span></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const apiKey = "c77f095defdb4193a1530532250508";
+
+    async function fetchWeather(city) {
+      try {
+        const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`);
+        const data = await response.json();
+
+        // Isi data ke elemen
+        document.getElementById("cityName").innerText = data.location.name;
+        document.getElementById("temp").innerText = data.current.temp_c + "°C";
+        document.getElementById("conditionText").innerText = data.current.condition.text;
+        document.getElementById("pressure").innerText = data.current.pressure_mb + " hPa";
+        document.getElementById("humidity").innerText = data.current.humidity + "%";
+        document.getElementById("wind").innerText = data.current.wind_kph + " km/h";
+        document.getElementById("feelslike").innerText = data.current.feelslike_c + "°C";
+        document.getElementById("uv").innerText = data.current.uv;
+        document.getElementById("wind_dir").innerText = data.current.wind_dir;
+        document.getElementById("last_updated").innerText = data.current.last_updated;
+        document.getElementById("nowTemp").innerText = data.current.temp_c + "°C " + data.current.condition.text;
+
+      } catch (err) {
+        alert("Kota tidak ditemukan atau API error.");
+      }
+    }
+
+    // Event saat enter ditekan
+    document.getElementById("cityInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const city = e.target.value.trim();
+        if (city) fetchWeather(city);
+      }
+    });
+
+    // Data awal
+    fetchWeather("Klaten");
+  </script>
+</body>
+
+</html>
