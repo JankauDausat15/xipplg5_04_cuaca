@@ -276,15 +276,8 @@
       }
     });
 
-<<<<<<< HEAD
     fetchWeather("Klaten");
 
-=======
-    // Tampilkan cuaca default
-    fetchWeather("Klaten");
-
-    // Inisialisasi Map
->>>>>>> 4c967e517eb2c988544ddf2a67e329bd652747f9
     const map = L.map('map').setView([-7.7, 110.6], 7);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -306,10 +299,6 @@
         .openPopup();
     });
 
-<<<<<<< HEAD
-=======
-    // Navigasi antar halaman
->>>>>>> 4c967e517eb2c988544ddf2a67e329bd652747f9
     const dashboardBtn = document.getElementById("nav-dashboard");
     const mapBtn = document.getElementById("nav-map");
     const dashboardPage = document.querySelector(".dashboard");
@@ -323,7 +312,6 @@
     mapBtn.addEventListener("click", () => {
       dashboardPage.style.display = "none";
       mapPage.style.display = "flex";
-<<<<<<< HEAD
       setTimeout(() => map.invalidateSize(), 100);
     });
 
@@ -339,11 +327,8 @@
     toggleBtn.addEventListener("click", () => {
       body.classList.toggle("dark-mode");
       const isDark = body.classList.contains("dark-mode");
-      toggleBtn.textContent = isDark ? "🌞 Light Mode" : "🌓 Mode";
+      toggleBtn.textCongitent = isDark ? "🌞 Light Mode" : "🌓 Mode";
       localStorage.setItem("mode", isDark ? "dark" : "light");
-=======
-      setTimeout(() => map.invalidateSize(), 100); // Perbaiki layout map
->>>>>>> 4c967e517eb2c988544ddf2a67e329bd652747f9
     });
   </script>
 </body>
