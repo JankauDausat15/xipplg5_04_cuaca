@@ -183,7 +183,7 @@
         <li id="nav-dashboard">Dashboard</li>
         <li id="nav-map">Map</li>
         <li>Saved Location</li>
-        <li>Calendar</li>
+        <li><a href="calender.html" style="text-decoration: none; color: inherit;">Calendar</a></li>
         <li>Settings</li>
         <li id="toggleModeBtn">🌓 Mode</li>
         <li>Log Out</li>
@@ -275,9 +275,7 @@
         if (city) fetchWeather(city);
       }
     });
-
-    fetchWeather("Klaten");
-
+fetchWeather("Klaten");
     const map = L.map('map').setView([-7.7, 110.6], 7);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
