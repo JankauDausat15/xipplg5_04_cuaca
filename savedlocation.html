@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-Clouds - Weather Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f1f5fb;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+    }
+    nav {
+      width: 240px;
+      background: white;
+      padding: 2rem 1.5rem;
+      box-shadow: 2px 0 8px rgb(0 0 0 / 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      font-weight: 500;
+      font-size: 1rem;
+      color: #4b5563;
+    }
+    nav a {
+      cursor: pointer;
+      padding: 0.4rem 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    nav a:hover, nav a.active {
+      background-color: #e0e7ff;
+      color: #1d4ed8;
+      font-weight: 700;
+    }
+    nav h1 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #2563eb;
+      margin-bottom: 2rem;
+    }
+    main {
+      flex: 1;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 1.5rem;
+    }
+    header img {
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      object-fit: cover;
+      border: 2px solid #2563eb;
+    }
+    .search-box {
+      margin-bottom: 1.5rem;
+      max-width: 360px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 9999px;
+      outline-offset: 2px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .search-box input:focus {
+      border-color: #2563eb;
+    }
+    .dashboard-main {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .weather-summary {
+      flex: 2 1 600px;
+      background: #d0e7ff;
+      border-radius: 1rem;
+      padding: 1.5rem 2rem;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .weather-summary h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .current-temp {
+      font-size: 4rem;
+      font-weight: 800;
+      color: #111827;
+      margin: 0;
+      line-height: 1;
+    }
+    .weather-condition {
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #374151;
+    }
+    .metric-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+      text-align: center;
+    }
+    .card-title {
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.25rem;
+    }
+    .card-value {
+      font-weight: 500;
+      color: #374151;
+      font-size: 1.125rem;
+    }
+    .week-forecast {
+      flex: 1 1 280px;
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+      font-size: 1rem;
+      color: #1f2937;
+    }
+    .week-forecast h3 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .forecast-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .forecast-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-weight: 500;
+      color: #374151;
+    }
+    .forecast-list li:last-child {
+      border-bottom: none;
+    }
+    /* Saved Location section style */
+    #saved-location-section {
+      margin-top: 2rem;
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.06);
+      max-width: 900px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #saved-location-section h3 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #1e40af;
+    }
+    .saved-locations-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+    }
+    .saved-locations-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid #d1d5db;
+      cursor: pointer;
+      font-weight: 600;
+      color: #374151;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .saved-locations-list li:hover {
+      background-color: #e0e7ff;
+      color: #1e40af;
+    }
+    .saved-locations-list li:last-child {
+      border-bottom: none;
+    }
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .remove-btn:hover {
+      color: #b91c1c;
+    }
+    .add-location-form {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      max-width: 400px;
+    }
+    .add-location-form input {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 1rem;
+      outline-offset: 2px;
+      transition: border-color 0.3s;
+    }
+    .add-location-form input:focus {
+      border-color: #2563eb;
+    }
+    .add-location-form button {
+      background-color: #2563eb;
+      border: none;
+      outline: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 9999px;
+      padding: 0 1.25rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .add-location-form button:disabled {
+      background-color: #a5b4fc;
+      cursor: not-allowed;
+    }
+    .add-location-form button:not(:disabled):hover {
+      background-color: #1e40af;
+    }
+
+    /* Scrollbar styling for saved locations */
+    .saved-locations-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    .saved-locations-list::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 4px;
+    }
+    .saved-locations-list::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>E-Clouds</h1>
+    <a href="#" id="nav-dashboard" class="active">Dashboard</a>
+    <a href="#" id="nav-map">Map</a>
+    <a href="#" id="nav-saved-location">Saved Location</a>
+    <a href="#" id="nav-calendar">Calendar</a>
+    <a href="#" id="nav-settings">Settings</a>
+    <a href="#" id="nav-logout">Log Out</a>
+  </nav>
+  <main>
+    <header>
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2031323d-d224-49a8-84ba-0b6c84efaea9.png" alt="User profile photo showing a young person with short hair in soft natural light" onerror="this.style.display='none';" />
+    </header>
+    <div class="search-box">
+      <input type="text" placeholder="Search city..." id="city-search" />
+    </div>
+    <section class="dashboard-main" id="dashboard-section">
+      <div class="weather-summary">
+        <h2>Klaten</h2>
+        <p class="current-temp">24.3℃</p>
+        <p class="weather-condition">Sunny</p>
+        <div class="metric-cards">
+          <div class="card">
+            <p class="card-title">Pressure</p>
+            <p class="card-value">1013 hPa</p>
+          </div>
+          <div class="card">
+            <p class="card-title">Humidity</p>
+            <p class="card-value">78%</p>
+          </div>
+          <div class="card">
+            <p class="card-title">Wind</p>
+            <p class="card-value">8.3 km/h</p>
+          </div>
+        </div>
+        <div class="metric-cards" style="margin-top:1rem;">
+          <div class="card">
+            <p class="card-title">Feels Like</p>
+            <p class="card-value">26.2℃</p>
+          </div>
+          <div class="card">
+            <p class="card-title">UV Index</p>
+            <p class="card-value">5.7</p>
+          </div>
+          <div class="card">
+            <p class="card-title">Wind Dir</p>
+            <p class="card-value">SSW</p>
+          </div>
+          <div class="card">
+            <p class="card-title">Last Update</p>
+            <p class="card-value">2025-08-06 09:30</p>
+          </div>
+        </div>
+      </div>
+      <aside class="week-forecast">
+        <h3>This Week</h3>
+        <ul class="forecast-list">
+          <li><span>Now</span><span>24.3℃ Sunny</span></li>
+          <li><span>Tomorrow</span><span>Coming soon</span></li>
+          <li><span>Friday</span><span>Coming soon</span></li>
+          <li><span>Saturday</span><span>Coming soon</span></li>
+          <li><span>Sunday</span><span>Coming soon</span></li>
+          <li><span>Monday</span><span>Coming soon</span></li>
+          <li><span>Tuesday</span><span>Coming soon</span></li>
+          <li><span>Wednesday</span><span>Coming soon</span></li>
+        </ul>
+      </aside>
+    </section>
+
+    <section id="saved-location-section" style="display:none;">
+      <h3>Saved Locations</h3>
+      <ul class="saved-locations-list" id="saved-locations-list">
+        <!-- Saved locations inserted here -->
+      </ul>
+      <form class="add-location-form" id="add-location-form" autocomplete="off">
+        <input type="text" id="new-location-input" placeholder="Add new location (city)" aria-label="Add new location" required />
+        <button type="submit" id="add-location-btn" disabled>Add</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // DOM elements
+    const navDashboard = document.getElementById('nav-dashboard');
+    const navMap = document.getElementById('nav-map');
+    const navSaved = document.getElementById('nav-saved-location');
+    const navCalendar = document.getElementById('nav-calendar');
+    const navSettings = document.getElementById('nav-settings');
+    const navLogout = document.getElementById('nav-logout');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const savedSection = document.getElementById('saved-location-section');
+
+    const savedLocationsList = document.getElementById('saved-locations-list');
+    const addLocationForm = document.getElementById('add-location-form');
+    const newLocationInput = document.getElementById('new-location-input');
+    const addLocationBtn = document.getElementById('add-location-btn');
+
+    // Initialize saved locations array from localStorage or empty
+    let savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || [];
+
+    // Set active nav link helper
+    function setActiveNav(activeElement) {
+      [navDashboard, navMap, navSaved, navCalendar, navSettings, navLogout].forEach(el => {
+        el.classList.remove('active');
+      });
+      activeElement.classList.add('active');
+    }
+
+    // Show or hide sections based on nav
+    function showSection(section) {
+      if (section === 'dashboard') {
+        dashboardSection.style.display = 'flex';
+        savedSection.style.display = 'none';
+      } else if (section === 'saved') {
+        dashboardSection.style.display = 'none';
+        savedSection.style.display = 'block';
+        renderSavedLocations();
+      } else {
+        dashboardSection.style.display = 'none';
+        savedSection.style.display = 'none';
+      }
+    }
+
+    // Render saved locations list
+    function renderSavedLocations() {
+      savedLocationsList.innerHTML = '';
+      if (savedLocations.length === 0) {
+        const emptyItem = document.createElement('li');
+        emptyItem.textContent = 'No saved locations yet.';
+        emptyItem.style.color = '#9ca3af';
+        emptyItem.style.fontStyle = 'italic';
+        emptyItem.style.cursor = 'default';
+        savedLocationsList.appendChild(emptyItem);
+        return;
+      }
+      savedLocations.forEach((location, index) => {
+        const li = document.createElement('li');
+
+        // Location name clickable to alert or could be linked to show weather for that location
+        const locName = document.createElement('span');
+        locName.textContent = location;
+        locName.title = `Select location: ${location}`;
+        locName.style.flex = '1';
+        locName.style.userSelect = 'none';
+        locName.style.cursor = 'pointer';
+        locName.addEventListener('click', () => {
+          alert(`Weather data for "${location}" is coming soon.`); 
+        });
+
+        // Remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.setAttribute('aria-label', `Remove ${location} from saved locations`);
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeLocation(index);
+        });
+
+        li.appendChild(locName);
+        li.appendChild(removeBtn);
+        savedLocationsList.appendChild(li);
+      });
+    }
+
+    // Remove location from savedLocations
+    function removeLocation(index) {
+      savedLocations.splice(index, 1);
+      localStorage.setItem('savedLocations', JSON.stringify(savedLocations));
+      renderSavedLocations();
+    }
+
+    // Add new location from input
+    addLocationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newLocation = newLocationInput.value.trim();
+      if (newLocation && !savedLocations.includes(newLocation)) {
+        savedLocations.push(newLocation);
+        localStorage.setItem('savedLocations', JSON.stringify(savedLocations));
+        newLocationInput.value = '';
+        addLocationBtn.disabled = true;
+        renderSavedLocations();
+      }
+    });
+    // Enable add button only if input has value
+    newLocationInput.addEventListener('input', () => {
+      addLocationBtn.disabled = newLocationInput.value.trim() === '';
+    });
+
+    // Navigation click handlers
+    navDashboard.addEventListener('click', (e) => {
+      e.preventDefault();
+      setActiveNav(navDashboard);
+      showSection('dashboard');
+    });
+    navSaved.addEventListener('click', (e) => {
+      e.preventDefault();
+      setActiveNav(navSaved);
+      showSection('saved');
+    });
+    // For demonstration, clicking other nav links hides all main sections
+    [navMap, navCalendar, navSettings, navLogout].forEach(navLink => {
+      navLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveNav(navLink);
+        showSection(null);
+      });
+    });
+
+    // Initial UI setup
+    showSection('dashboard');
+    renderSavedLocations();
+  </script>
+</body>
+</html>
+
